@@ -1,16 +1,19 @@
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { BrowserRouter, Routes, Route } from "react-router";
+import Index from "./pages/Index";
+import NotFound from "./pages/NotFound";
 
-import './App.css'
 
-function App() {
+const App = () => (
+  <>
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+  </>
+);
 
-  return (
-    <>
-     <h1 className="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-    
-    </>
-  )
-}
-
-export default App
+export default App;

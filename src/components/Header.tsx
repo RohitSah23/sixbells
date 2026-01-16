@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Menu } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -84,7 +84,7 @@ export function Header() {
           {/* Desktop CTA */}
           <div className="hidden lg:block">
             <Button
-              variant="outline"
+              variant="hero"
               size="default"
               onClick={() => scrollToSection("#reservations")}
             >
@@ -132,7 +132,7 @@ export function Header() {
 
                 <div className="mt-auto pb-8">
                   <Button
-                    variant="outline"
+                    variant="hero"
                     size="lg"
                     className="w-full"
                     onClick={() => scrollToSection("#reservations")}

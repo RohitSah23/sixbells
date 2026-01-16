@@ -17,7 +17,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* Shared Colors (Hsl variables defined in :root/.dark) */
+  /* Shared Colors */
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -48,16 +48,6 @@
   --color-charcoal: hsl(var(--charcoal));
   --color-charcoal-light: hsl(var(--charcoal-light));
 
-  /* Sidebar Colors */
-  --color-sidebar: hsl(var(--sidebar-background));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
-
   /* Custom Shadows */
   --shadow-soft: var(--shadow-soft);
   --shadow-medium: var(--shadow-medium);
@@ -69,6 +59,7 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
   --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
   --animate-fade-in: fade-in 0.5s ease-out forwards;
+  --animate-scale-in: scale-in 0.4s ease-out forwards;
   --animate-shimmer: shimmer 2s infinite linear;
 
   @keyframes accordion-down {
@@ -87,19 +78,56 @@
     from { opacity: 0; }
     to { opacity: 1; }
   }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
 }
 
-/* Base Utility for Container - v4 equivalent */
+/* Base Utility for Container - v4 equivalent of v3 reach */
 @utility container {
   margin-inline: auto;
   padding-inline: 2rem;
-  @media (width >= --breakpoint-2xl) {
-    max-width: 1400px;
+  @media (width >= 640px) { max-width: 640px; }
+  @media (width >= 768px) { max-width: 768px; }
+  @media (width >= 1024px) { max-width: 1024px; }
+  @media (width >= 1280px) { max-width: 1280px; }
+  @media (width >= 1400px) { max-width: 1400px; }
+}
+
+@utility section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  @media (width >= 768px) {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
+  @media (width >= 1024px) {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+@utility container-narrow {
+  max-width: 1024px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 640px) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility text-gradient-gold {
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, hsl(var(--gold)), hsl(var(--gold-dark)));
 }
 
 @utility bg-gradient-hero {
@@ -109,6 +137,16 @@
     hsl(var(--charcoal) / 0.5) 50%,
     hsl(var(--charcoal) / 0.8) 100%
   );
+}
+
+@utility hover-lift {
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  &:hover {
+    transform: translateY(-0.25rem);
+    box-shadow: var(--shadow-elevated);
+  }
 }
 
 :root {
@@ -148,16 +186,6 @@
   --shadow-medium: 0 8px 30px -8px hsl(150 20% 15% / 0.15);
   --shadow-elevated: 0 20px 50px -12px hsl(150 20% 15% / 0.2);
   --shadow-gold: 0 4px 20px -4px hsl(42 85% 55% / 0.3);
-
-  /* Sidebar Tokens */
-  --sidebar-background: 0 0% 98%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-primary: 240 5.9% 10%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
 }
 
 .dark {
@@ -180,15 +208,6 @@
   --border: 150 15% 20%;
   --input: 150 15% 20%;
   --ring: 45 30% 90%;
-
-  --sidebar-background: 240 5.9% 10%;
-  --sidebar-foreground: 240 4.8% 95.9%;
-  --sidebar-primary: 224.3 76.3% 48%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 240 3.7% 15.9%;
-  --sidebar-accent-foreground: 240 4.8% 95.9%;
-  --sidebar-border: 240 3.7% 15.9%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
 }
 
 @layer base {
@@ -197,8 +216,14 @@
   }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    scroll-behavior: smooth;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
 }
+
+.animation-delay-100 { animation-delay: 100ms; }
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-300 { animation-delay: 300ms; }
+.animation-delay-400 { animation-delay: 400ms; }

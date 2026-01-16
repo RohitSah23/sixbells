@@ -18,7 +18,7 @@ const Index = () => {
         <Highlights />
         <FeaturedMenu />
         <Gallery />
-        
+        <Reservations />
       </main>
       <Footer />
     </div>

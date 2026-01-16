@@ -79,7 +79,7 @@ export function Highlights() {
           animate={isInView ? "visible" : "hidden"}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
         >
-          {highlights.map((item, index) => (
+          {highlights.map((item) => (
             <motion.div
               key={item.title}
               variants={itemVariants}

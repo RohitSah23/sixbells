@@ -17,6 +17,7 @@ const Index = () => {
         <About />
         <Highlights />
         <FeaturedMenu />
+        <Gallery />
         
       </main>
       <Footer />

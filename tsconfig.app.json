@@ -30,5 +30,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "../Testimonials.tsx"]
+  "include": ["src", "src/components/Testimonials.tsx"]
 }

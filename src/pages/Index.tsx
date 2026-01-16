@@ -5,7 +5,7 @@ import { Highlights } from "@/components/Highlights";
 import { FeaturedMenu } from "@/components/FeaturedMenu";
 import { Gallery } from "@/components/Gallery";
 import { Reservations } from "@/components/Reservations";
-import { Testimonials } from "../../../Testimonials";
+import { Testimonials } from "@/components/Testimonials";
 import { Footer } from "@/components/Footer";
 
 const Index = () => {
@@ -19,6 +19,7 @@ const Index = () => {
         <FeaturedMenu />
         <Gallery />
         <Reservations />
+        <Testimonials />
       </main>
       <Footer />
     </div>

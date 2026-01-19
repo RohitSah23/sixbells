@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const NAV_LINKS = [
   { href: "#home", label: "Home" },
@@ -40,6 +41,8 @@ const NavLink = ({ href, label, onClick, className }: NavLinkProps) => (
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -48,19 +51,29 @@ export function Header() {
   }, []);
 
   const scrollToSection = useCallback((href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      const offset = 80; // Account for fixed header
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
+    if (location.pathname !== "/") {
+      navigate("/");
+      // Give time for navigation to complete before scrolling
+      setTimeout(() => {
+        const element = document.querySelector(href);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+        }
+      }, 100);
+    } else {
+      const element = document.querySelector(href);
+      if (element) {
+        const offset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+      }
     }
     setIsOpen(false);
-  }, []);
+  }, [location.pathname, navigate]);
 
   return (
     <motion.header
@@ -77,10 +90,9 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
+          <Link
+            to="/"
+            onClick={() => {
               scrollToSection("#home");
             }}
             className="group flex items-center gap-2"
@@ -91,7 +103,7 @@ export function Header() {
             <span className="hidden font-heading text-lg text-gold sm:inline">
               Oxford
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <ul className="hidden items-center gap-8 lg:flex">

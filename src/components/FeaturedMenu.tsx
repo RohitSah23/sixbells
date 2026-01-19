@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 import menuFish from "@/assets/menu-fish.jpg";
 import menuBurger from "@/assets/menu-burger.jpg";
 import menuDessert from "@/assets/menu-dessert.jpg";
@@ -97,7 +98,7 @@ export function FeaturedMenu() {
               <Card className="bg-charcoal-light border-charcoal-light overflow-hidden group hover-lift">
                 <CardContent className="p-0">
                   <div className="flex flex-col sm:flex-row">
-                    <div className="relative w-full sm:w-40 h-48 sm:h-auto flex-shrink-0 overflow-hidden">
+                    <div className="relative w-full sm:w-40 h-48 sm:h-auto shrink-0 overflow-hidden">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -109,9 +110,6 @@ export function FeaturedMenu() {
                         <h3 className="font-heading text-lg font-semibold text-cream group-hover:text-gold transition-colors">
                           {item.name}
                         </h3>
-                        <span className="text-gold font-semibold text-lg ml-4">
-                          {item.price}
-                        </span>
                       </div>
                       <p className="text-cream/60 text-sm leading-relaxed">
                         {item.description}
@@ -131,8 +129,10 @@ export function FeaturedMenu() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center"
         >
-          <Button variant="hero" size="lg">
-            View Full Menu
+          <Button variant="hero" size="lg" asChild>
+            <Link to="/menu">
+              View Full Menu
+            </Link>
           </Button>
         </motion.div>
       </div>

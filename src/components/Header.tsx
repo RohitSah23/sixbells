@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -159,6 +159,17 @@ export function Header() {
               className="flex w-[300px] flex-col border-charcoal-light bg-charcoal p-0"
             >
               <div className="flex flex-col px-6 pt-10">
+                <SheetClose asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute right-4 top-4.5 text-cream hover:bg-cream/10 hover:text-gold sm:right-6 lg:right-8"
+                    aria-label="Close menu"
+                  >
+                    <X className="h-6 w-6" />
+                  </Button>
+                </SheetClose>
+
                 <SheetTitle className="mb-8 flex items-center">
                   <span className="font-heading text-2xl font-bold text-cream">
                     Six Bells

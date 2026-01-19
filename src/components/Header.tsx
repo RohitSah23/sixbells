@@ -9,7 +9,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 const NAV_LINKS = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
-  { href: "#menu", label: "Menu" },
+  { href: "/menu", label: "Menu" },
   { href: "#gallery", label: "Gallery" },
   { href: "#reservations", label: "Book" },
   { href: "#contact", label: "Contact" },
@@ -22,21 +22,38 @@ interface NavLinkProps {
   className?: string;
 }
 
-const NavLink = ({ href, label, onClick, className }: NavLinkProps) => (
-  <a
-    href={href}
-    onClick={(e) => {
-      e.preventDefault();
-      onClick(href);
-    }}
-    className={cn(
-      "transition-colors duration-300 hover:text-gold",
-      className
-    )}
-  >
-    {label}
-  </a>
-);
+const NavLink = ({ href, label, onClick, className }: NavLinkProps) => {
+  if (href.startsWith("/")) {
+    return (
+      <Link
+        to={href}
+        onClick={() => onClick(href)}
+        className={cn(
+          "transition-colors duration-300 hover:text-gold",
+          className
+        )}
+      >
+        {label}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(href);
+      }}
+      className={cn(
+        "transition-colors duration-300 hover:text-gold",
+        className
+      )}
+    >
+      {label}
+    </a>
+  );
+};
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,6 +68,12 @@ export function Header() {
   }, []);
 
   const scrollToSection = useCallback((href: string) => {
+    if (href.startsWith("/")) {
+      navigate(href);
+      setIsOpen(false);
+      return;
+    }
+
     if (location.pathname !== "/") {
       navigate("/");
       // Give time for navigation to complete before scrolling
@@ -138,7 +161,7 @@ export function Header() {
                 variant="ghost"
                 size="icon"
                 aria-label="Toggle menu"
-                className="text-cream hover:bg-cream/10"
+                className="text-cream hover:bg-cream/10 border border-cream/20"
               >
                 <AnimatePresence mode="wait">
                   {isOpen ? (
@@ -175,7 +198,7 @@ export function Header() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute right-4 top-4.5 text-cream hover:bg-cream/10 hover:text-gold sm:right-6 lg:right-8"
+                    className="absolute right-4 top-4.5 text-cream hover:bg-cream/10 hover:text-gold sm:right-6 lg:right-8 border border-cream/20"
                     aria-label="Close menu"
                   >
                     <X className="h-6 w-6" />

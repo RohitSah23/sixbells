@@ -204,15 +204,9 @@ const FullMenu = () => {
               <h2 className="font-heading text-2xl text-cream mb-4">
                 Daily Specials
               </h2>
-              <p className="text-cream/70 text-sm leading-relaxed mb-6">
+              <p className="text-cream/70 text-sm leading-relaxed">
                 See our specials board or ask a member of staff for today's unique creations.
               </p>
-              <div className="pt-6 border-t border-charcoal-light/30">
-                <p className="text-gold font-medium text-xs tracking-widest uppercase mb-2">Service Charge</p>
-                <p className="text-cream/50 text-[10px] leading-tight">
-                  A discretionary service charge of 10% is added to the bill.
-                </p>
-              </div>
             </motion.div>
           </div>
         </section>

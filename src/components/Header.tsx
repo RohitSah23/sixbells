@@ -1,48 +1,78 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Menu } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
-const navLinks = [
+const NAV_LINKS = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#menu", label: "Menu" },
   { href: "#gallery", label: "Gallery" },
   { href: "#reservations", label: "Book" },
   { href: "#contact", label: "Contact" },
-];
+] as const;
+
+interface NavLinkProps {
+  href: string;
+  label: string;
+  onClick: (href: string) => void;
+  className?: string;
+}
+
+const NavLink = ({ href, label, onClick, className }: NavLinkProps) => (
+  <a
+    href={href}
+    onClick={(e) => {
+      e.preventDefault();
+      onClick(href);
+    }}
+    className={cn(
+      "transition-colors duration-300 hover:text-gold",
+      className
+    )}
+  >
+    {label}
+  </a>
+);
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
+  const scrollToSection = useCallback((href: string) => {
     const element = document.querySelector(href);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const offset = 80; // Account for fixed header
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
     setIsOpen(false);
-  };
+  }, []);
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         isScrolled
-          ? "bg-charcoal/95 backdrop-blur-md shadow-medium py-3"
+          ? "bg-charcoal/95 py-3 shadow-medium backdrop-blur-md"
           : "bg-transparent py-5"
-      }`}
+      )}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <nav className="flex items-center justify-between">
@@ -53,93 +83,113 @@ export function Header() {
               e.preventDefault();
               scrollToSection("#home");
             }}
-            className="flex items-center gap-2"
+            className="group flex items-center gap-2"
           >
-            <span className="font-heading text-2xl md:text-3xl font-bold text-cream">
+            <span className="font-heading text-2xl font-bold text-cream transition-colors group-hover:text-gold md:text-3xl">
               Six Bells
             </span>
-            <span className="hidden sm:inline text-gold font-heading text-lg">
+            <span className="hidden font-heading text-lg text-gold sm:inline">
               Oxford
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
+          <ul className="hidden items-center gap-8 lg:flex">
+            {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(link.href);
-                  }}
-                  className="text-cream/80 hover:text-gold transition-colors duration-300 font-medium text-sm tracking-wide uppercase"
-                >
-                  {link.label}
-                </a>
+                <NavLink
+                  {...link}
+                  onClick={scrollToSection}
+                  className="text-sm font-medium uppercase tracking-wide text-cream/80"
+                />
               </li>
             ))}
           </ul>
 
           {/* Desktop CTA */}
           <div className="hidden lg:block">
-            <Button
-              variant="hero"
-              size="default"
-              onClick={() => scrollToSection("#reservations")}
-            >
-              Book a Table
+            <Button variant="hero" asChild>
+              <a
+                href="https://widget.thefork.com/en/839e957f-1943-4ca7-b1b6-69a84769ab7a"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book a Table
+              </a>
             </Button>
           </div>
 
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" className="text-cream hover:bg-cream/10">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle menu</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Toggle menu"
+                className="text-cream hover:bg-cream/10"
+              >
+                <AnimatePresence mode="wait">
+                  {isOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ opacity: 0, rotate: -90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      exit={{ opacity: 0, rotate: 90 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <X className="h-6 w-6" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="menu"
+                      initial={{ opacity: 0, rotate: 90 }}
+                      animate={{ opacity: 1, rotate: 0 }}
+                      exit={{ opacity: 0, rotate: -90 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Menu className="h-6 w-6" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </Button>
             </SheetTrigger>
+
             <SheetContent
               side="right"
-              className="w-[300px] bg-charcoal border-charcoal-light"
+              className="flex w-[300px] flex-col border-charcoal-light bg-charcoal p-0"
             >
-              <div className="flex flex-col h-full pt-8">
-                <div className="mb-8">
+              <div className="flex flex-col px-6 pt-10">
+                <SheetTitle className="mb-8 flex items-center">
                   <span className="font-heading text-2xl font-bold text-cream">
                     Six Bells
                   </span>
-                  <span className="text-gold font-heading text-lg ml-2">
+                  <span className="ml-2 font-heading text-lg text-gold">
                     Oxford
                   </span>
-                </div>
+                </SheetTitle>
 
-                <nav className="flex flex-col gap-4">
-                  {navLinks.map((link) => (
-                    <a
+                <nav className="flex flex-col gap-2">
+                  {NAV_LINKS.map((link) => (
+                    <NavLink
                       key={link.href}
-                      href={link.href}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollToSection(link.href);
-                      }}
-                      className="text-cream/80 hover:text-gold transition-colors duration-300 font-medium text-lg py-2 border-b border-charcoal-light"
-                    >
-                      {link.label}
-                    </a>
+                      {...link}
+                      onClick={scrollToSection}
+                      className="border-b border-charcoal-light py-4 text-lg font-medium text-cream/80 last:border-0"
+                    />
                   ))}
                 </nav>
+              </div>
 
-                <div className="mt-auto pb-8">
-                  <Button
-                    variant="hero"
-                    size="lg"
-                    className="w-full"
-                    onClick={() => scrollToSection("#reservations")}
+              <div className="mt-auto p-6 pb-10">
+                <Button variant="hero" size="lg" className="w-full" asChild>
+                  <a
+                    href="https://widget.thefork.com/en/839e957f-1943-4ca7-b1b6-69a84769ab7a"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     Book a Table
-                  </Button>
-                </div>
+                  </a>
+                </Button>
               </div>
             </SheetContent>
           </Sheet>

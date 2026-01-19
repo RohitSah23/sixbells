@@ -1,56 +1,13 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar, Clock, Users, Check } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 export function Reservations() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const { toast } = useToast();
   
-  const [formData, setFormData] = useState({
-    date: "",
-    time: "",
-    guests: "",
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Reservation Request Received",
-      description: "We'll confirm your booking shortly. Thank you!",
-    });
-    setFormData({
-      date: "",
-      time: "",
-      guests: "",
-      name: "",
-      email: "",
-      phone: "",
-    });
-  };
-
-  const timeSlots = [
-    "12:00", "12:30", "13:00", "13:30", "14:00",
-    "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00",
-  ];
-
-  const guestOptions = ["1", "2", "3", "4", "5", "6", "7", "8+"];
+  const widgetUrl = "https://widget.thefork.com/en/839e957f-1943-4ca7-b1b6-69a84769ab7a?origin=facebook&utm_medium=integration&utm_source=instagram&step=date&fbclid=PAVERFWAPXRORleHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAacCjEJM88WUJYICVydYDPqrphq6Ktg7_cPBe2MZXd4jmCjXxUeK0exrbXL9qw_aem_dfQm5Y1v28ITFdlinlwesA";
 
   return (
     <section id="reservations" className="section-padding bg-background">
@@ -75,150 +32,19 @@ export function Reservations() {
             </p>
           </motion.div>
 
-          {/* Reservation Form */}
+          {/* Reservation Widget */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="bg-card border-border shadow-elevated">
-              <CardContent className="p-6 md:p-10">
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Date, Time, Guests Row */}
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="date" className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-gold" />
-                        Date
-                      </Label>
-                      <Input
-                        id="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={(e) =>
-                          setFormData({ ...formData, date: e.target.value })
-                        }
-                        required
-                        className="bg-background border-border focus:border-gold"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="time" className="flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-gold" />
-                        Time
-                      </Label>
-                      <Select
-                        value={formData.time}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, time: value })
-                        }
-                        required
-                      >
-                        <SelectTrigger className="bg-background border-border focus:border-gold">
-                          <SelectValue placeholder="Select time" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((time) => (
-                            <SelectItem key={time} value={time}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="guests"
-                        className="flex items-center gap-2"
-                      >
-                        <Users className="w-4 h-4 text-gold" />
-                        Guests
-                      </Label>
-                      <Select
-                        value={formData.guests}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, guests: value })
-                        }
-                        required
-                      >
-                        <SelectTrigger className="bg-background border-border focus:border-gold">
-                          <SelectValue placeholder="Number of guests" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {guestOptions.map((num) => (
-                            <SelectItem key={num} value={num}>
-                              {num} {num === "1" ? "Guest" : "Guests"}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Contact Details */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Your name"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        required
-                        className="bg-background border-border focus:border-gold"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your@email.com"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                        required
-                        className="bg-background border-border focus:border-gold"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="+44 1234 567890"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                      required
-                      className="bg-background border-border focus:border-gold"
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    variant="hero"
-                    size="xl"
-                    className="w-full"
-                  >
-                    <Check className="w-5 h-5 mr-2" />
-                    Request Reservation
-                  </Button>
-
-                  <p className="text-center text-muted-foreground text-sm">
-                    You will receive a confirmation email within 24 hours.
-                  </p>
-                </form>
+            <Card className="bg-card border-border shadow-elevated overflow-hidden">
+              <CardContent className="p-0 h-[650px]">
+                <iframe
+                  src={widgetUrl}
+                  style={{ width: '100%', height: '100%', border: 'none' }}
+                  title="TheFork Booking Widget"
+                />
               </CardContent>
             </Card>
           </motion.div>
@@ -227,3 +53,4 @@ export function Reservations() {
     </section>
   );
 }
+

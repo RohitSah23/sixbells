@@ -81,9 +81,15 @@ export function Hero() {
             <Button
               variant="hero"
               size="xl"
-              onClick={() => scrollToSection("#reservations")}
+              asChild
             >
-              Book a Table
+              <a 
+                href="https://widget.thefork.com/en/839e957f-1943-4ca7-b1b6-69a84769ab7a?origin=facebook&utm_medium=integration&utm_source=instagram&step=date&fbclid=PAVERFWAPXRORleHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAacCjEJM88WUJYICVydYDPqrphq6Ktg7_cPBe2MZXd4jmCjXxUeK0exrbXL9qw_aem_dfQm5Y1v28ITFdlinlwesA" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                Book a Table
+              </a>
             </Button>
             <Button
               variant="heroOutline"

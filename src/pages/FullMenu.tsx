@@ -101,31 +101,57 @@ const SIDES = [
 
 const FullMenu = () => {
   return (
-    <div className="min-h-screen bg-charcoal">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-charcoal"
+    >
       <Header />
       
-      <main className="pt-32 pb-20">
+      <main className="pt-32 pb-20 overflow-hidden">
         <section className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
-            <p className="text-gold font-medium tracking-[0.2em] uppercase text-sm mb-3">
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-gold font-medium tracking-[0.2em] uppercase text-sm mb-3"
+            >
               Lunch Menu (12 - 3pm)
-            </p>
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-cream mb-6">
+            </motion.p>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-cream mb-6"
+            >
               Seasonal Favourites
-            </h1>
-            <p className="text-cream/70 text-lg leading-relaxed">
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="text-cream/70 text-lg leading-relaxed"
+            >
               Explore our fresh, seasonal lunch offerings. From festive roasts to 
               our signature smash burgers, perfect for a midday treat.
-            </p>
+            </motion.p>
           </motion.div>
 
           <Tabs defaultValue="mains" className="w-full">
-            <div className="flex justify-center mb-12">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex justify-center mb-12"
+            >
               <TabsList className="bg-charcoal-light border border-charcoal-light/50 p-1 h-auto flex flex-wrap justify-center gap-2">
                 <TabsTrigger 
                   value="starters"
@@ -146,17 +172,31 @@ const FullMenu = () => {
                   Desserts
                 </TabsTrigger>
               </TabsList>
-            </div>
+            </motion.div>
 
             {Object.entries(MENU_DATA).map(([category, items]) => (
               <TabsContent key={category} value={category} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-                <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                  {items.map((item, index) => (
+                <motion.div 
+                  className="grid md:grid-cols-2 gap-6 lg:gap-8"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    visible: {
+                      transition: {
+                        staggerChildren: 0.1
+                      }
+                    }
+                  }}
+                >
+                  {items.map((item) => (
                     <motion.div
                       key={item.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.05 }}
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        visible: { opacity: 1, y: 0 }
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
                     >
                       <Card className="bg-charcoal-light/30 border-charcoal-light/50 hover:border-gold/30 transition-all group overflow-hidden">
                         <CardContent className="p-6">
@@ -172,15 +212,17 @@ const FullMenu = () => {
                       </Card>
                     </motion.div>
                   ))}
-                </div>
+                </motion.div>
               </TabsContent>
             ))}
           </Tabs>
 
           <div className="mt-20 grid lg:grid-cols-3 gap-8">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
               className="lg:col-span-2 p-8 rounded-2xl bg-charcoal-light/20 border border-charcoal-light/50"
             >
               <div className="flex items-center justify-between mb-8">
@@ -188,17 +230,26 @@ const FullMenu = () => {
                 <div className="h-px flex-1 bg-charcoal-light/30 mx-6 hidden sm:block"></div>
               </div>
               <div className="grid sm:grid-cols-2 gap-x-12 gap-y-4">
-                {SIDES.map((side) => (
-                  <div key={side.name} className="flex justify-between items-center border-b border-charcoal-light/20 pb-2 group">
+                {SIDES.map((side, idx) => (
+                  <motion.div 
+                    key={side.name} 
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ delay: idx * 0.05 }}
+                    viewport={{ once: true }}
+                    className="flex justify-between items-center border-b border-charcoal-light/20 pb-2 group"
+                  >
                     <span className="text-cream/80 group-hover:text-gold transition-colors">{side.name}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
               className="p-8 rounded-2xl bg-linear-to-br from-charcoal-light to-charcoal border border-charcoal-light/50 text-center flex flex-col justify-center"
             >
               <h2 className="font-heading text-2xl text-cream mb-4">
@@ -213,7 +264,7 @@ const FullMenu = () => {
       </main>
 
       <Footer />
-    </div>
+    </motion.div>
   );
 };
 
